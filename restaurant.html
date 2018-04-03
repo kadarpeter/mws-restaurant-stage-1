@@ -21,9 +21,12 @@
         <h1><a href="/">Restaurant Reviews</a></h1>
     </nav>
     <!-- Beginning breadcrumb -->
-    <ul id="breadcrumb">
-        <li><a href="/">Home</a></li>
-    </ul>
+
+    <div class="breadcrumb-container">
+        <ul id="breadcrumb" class="container">
+            <li><a href="/">Home</a></li>
+        </ul>
+    </div>
     <!-- End breadcrumb -->
     <!-- End nav -->
 </header>
@@ -31,24 +34,28 @@
 
 <!-- Beginning main -->
 <main id="maincontent">
-    <!-- Beginning map -->
-    <section id="map-container">
-        <div id="map"></div>
-    </section>
-    <!-- End map -->
+    <div class="container--flexbox">
+        <!-- Beginning map -->
+        <section id="map-container">
+            <div id="map"></div>
+        </section>
+        <!-- End map -->
 
-    <!-- Beginning restaurant -->
-    <section id="restaurant-container">
-        <h1 id="restaurant-name"></h1>
-        <img id="restaurant-img">
-        <p id="restaurant-cuisine"></p>
-        <p id="restaurant-address"></p>
-        <table id="restaurant-hours"></table>
-    </section>
-    <!-- end restaurant -->
+        <!-- Beginning restaurant -->
+        <section id="restaurant-container">
+            <h1 id="restaurant-name"></h1>
+            <img id="restaurant-img">
+            <p id="restaurant-cuisine"></p>
+            <p id="restaurant-address"></p>
+            <table id="restaurant-hours"></table>
+        </section>
+        <!-- end restaurant -->
+    </div>
+
+    <hr>
 
     <!-- Beginning reviews -->
-    <section id="reviews-container">
+    <section id="reviews-container" class="container">
         <ul id="reviews-list"></ul>
     </section>
     <!-- End reviews -->
