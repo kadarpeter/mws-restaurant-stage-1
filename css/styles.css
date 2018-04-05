@@ -52,6 +52,10 @@ article, aside, canvas, details, figcaption, figure, footer, header, hgroup, men
   display: block;
 }
 
+select:focus {
+  outline-color: #bf1722;
+}
+
 #maincontent {
   background-color: #f3f3f3;
   min-height: 100%;
@@ -59,7 +63,7 @@ article, aside, canvas, details, figcaption, figure, footer, header, hgroup, men
 
 #footer {
   background-color: #444;
-  color: #aaa;
+  color: #b7b7b7;
   font-size: 8pt;
   letter-spacing: 1px;
   padding: 25px;
@@ -513,4 +517,25 @@ p.review-rating {
 
 #restaurant-hours td {
   color: #666;
+}
+
+/* Skip link */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: #bf1722;
+  color: #fff;
+  padding: 8px;
+  z-index: 100;
+}
+
+.skip-link:hover {
+  color: #fff;
+  background: #ac1621;
+}
+
+.skip-link:focus {
+  top: 0;
+  color: #fff;
 }

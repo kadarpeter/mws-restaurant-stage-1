@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
     <meta charset="utf-8">
@@ -16,6 +16,7 @@
 <body class="inside">
 <!-- Beginning header -->
 <header>
+    <a href="#reviews-container" class="skip-link">Skip to reviews</a>
     <!-- Beginning nav -->
     <nav>
         <h1><a href="/">Restaurant Reviews</a></h1>
@@ -33,7 +34,7 @@
 <!-- End header -->
 
 <!-- Beginning main -->
-<main id="maincontent">
+<main id="maincontent" tabindex="-1">
     <div class="container--flexbox">
         <!-- Beginning map -->
         <section id="map-container">
@@ -45,9 +46,9 @@
         <section id="restaurant-container">
             <h1 id="restaurant-name"></h1>
             <img id="restaurant-img">
-            <p id="restaurant-cuisine"></p>
+            <p id="restaurant-cuisine" aria-label="Restaurant Cuisine"></p>
             <address id="restaurant-address"></address>
-            <table id="restaurant-hours"></table>
+            <table id="restaurant-hours" aria-label="Restaurant Hours"></table>
         </section>
         <!-- end restaurant -->
     </div>

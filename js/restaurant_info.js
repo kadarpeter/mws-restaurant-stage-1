@@ -125,18 +125,20 @@ createReviewHTML = (review) => {
   li.classList.add('review-item');
   name.innerHTML = review.name;
   name.classList.add('review-author');
+  name.setAttribute('aria-label', 'Review author');
   reviewHeader.appendChild(name);
   reviewHeader.classList.add('review-header');
 
   const date = document.createElement('span');
   date.innerHTML = review.date;
   date.classList.add('review-date');
+  date.setAttribute('aria-label', 'Review date');
   reviewHeader.appendChild(date);
 
   li.appendChild(reviewHeader);
 
   const rating = document.createElement('p');
-  rating.innerHTML = `<span>Rating: ${review.rating}</span>`;
+  rating.innerHTML = `<span aria-label="Rating">Rating: ${review.rating}</span>`;
   rating.classList.add('review-rating');
   li.appendChild(rating);
 
