@@ -536,6 +536,10 @@ p.review-rating {
 }
 
 .skip-link:focus {
-  top: 0;
+  top: 80px;
   color: #fff;
+}
+
+.inside .skip-link:focus {
+  top: 115px;
 }
