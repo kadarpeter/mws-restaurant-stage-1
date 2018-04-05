@@ -2,20 +2,44 @@ let restaurant;
 var map;
 
 /**
+ * Register Service Worker
+ */
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js').then((registration) => {
+    console.log('ServiceWorker registration successful with scope: ', registration.scope);
+  }, (err) => {
+    console.log('ServiceWorker registration failed: ', err);
+  });
+}
+
+/**
+ * Fetch restaurant info on page load
+ */
+document.addEventListener('DOMContentLoaded', () => {
+  fetchRestaurantFromURL((error) => {
+    if (error) { // Got an error!
+      console.error(error);
+    } else {
+      fillBreadcrumb();
+    }
+  });
+});
+
+/**
  * Initialize Google map, called from HTML.
  */
 window.initMap = () => {
   fetchRestaurantFromURL((error, restaurant) => {
-    if (error) { // Got an error!
-      console.error(error);
-    } else {
+    if (!error) { // Got an error!
       self.map = new google.maps.Map(document.getElementById('map'), {
         zoom: 16,
         center: restaurant.latlng,
         scrollwheel: false
       });
-      fillBreadcrumb();
-      DBHelper.mapMarkerForRestaurant(self.restaurant, self.map);
+
+      if (self.map) {
+        DBHelper.mapMarkerForRestaurant(self.restaurant, self.map);
+      }
     }
   });
 }
