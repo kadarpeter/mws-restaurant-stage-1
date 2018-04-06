@@ -2,17 +2,6 @@ let restaurant;
 var map;
 
 /**
- * Register Service Worker
- */
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js').then((registration) => {
-    console.log('ServiceWorker registration successful with scope: ', registration.scope);
-  }, (err) => {
-    console.log('ServiceWorker registration failed: ', err);
-  });
-}
-
-/**
  * Fetch restaurant info on page load
  */
 document.addEventListener('DOMContentLoaded', () => {
@@ -83,7 +72,7 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   image.className = 'restaurant-img'
   image.src = DBHelper.imageUrlForRestaurant(restaurant);
   image.setAttribute('srcset', `${DBHelper.imageUrlForRestaurant(restaurant)} 1x, ${DBHelper.imageUrlForRestaurant(restaurant, '@2x')} 2x`);
-  image.setAttribute('alt', restaurant.name);
+  image.setAttribute('alt', `${restaurant.name} restaurant in ${restaurant.neighborhood}`);
 
   const cuisine = document.getElementById('restaurant-cuisine');
   cuisine.innerHTML = restaurant.cuisine_type;
@@ -122,7 +111,7 @@ fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => 
  */
 fillReviewsHTML = (reviews = self.restaurant.reviews) => {
   const container = document.getElementById('reviews-container');
-  const title = document.createElement('h2');
+  const title = document.createElement('h3');
   title.innerHTML = 'Reviews';
   title.tabIndex = 0;
   container.appendChild(title);
@@ -182,7 +171,7 @@ createReviewHTML = (review) => {
 fillBreadcrumb = (restaurant=self.restaurant) => {
   const breadcrumb = document.getElementById('breadcrumb');
   const li = document.createElement('li');
-  li.innerHTML = restaurant.name;
+  li.innerHTML = `<a href="/restaurant.html?id=${restaurant.id}" aria-current="page">${restaurant.name}</a>`;
   breadcrumb.appendChild(li);
 }
 

@@ -114,6 +114,9 @@ nav h1 a {
 
 .breadcrumb-container {
   background-color: #eee;
+  display: block;
+  height: auto;
+  text-align: left;
 }
 
 #breadcrumb {
@@ -148,6 +151,13 @@ nav h1 a {
 #breadcrumb li a:hover {
   color: #01447e;
   text-decoration: underline;
+}
+
+/* Last bradcrumb link no hover */
+#breadcrumb li:last-child a,
+#breadcrumb li:last-child a:hover {
+  color: #333;
+  text-decoration: none;
 }
 
 /* ====================== Map ====================== */
@@ -435,7 +445,7 @@ nav h1 a {
   padding: 0 15px 80px;
 }
 
-#reviews-container h2 {
+#reviews-container h3 {
   color: #f58500;
   font-size: 24pt;
   font-weight: 300;

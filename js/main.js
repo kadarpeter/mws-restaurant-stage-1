@@ -5,19 +5,6 @@ var map;
 var markers = [];
 
 /**
- * Register Service Worker
- */
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js').then((registration) => {
-      console.log('ServiceWorker registration successful with scope: ', registration.scope);
-    }, (err) => {
-      console.log('ServiceWorker registration failed: ', err);
-    });
-  });
-}
-
-/**
  * Fetch neighborhoods and cuisines as soon as the page is loaded.
  */
 document.addEventListener('DOMContentLoaded', () => {
@@ -158,7 +145,7 @@ createRestaurantHTML = (restaurant) => {
   image.className = 'restaurant-img';
   image.src = DBHelper.imageUrlForRestaurant(restaurant);
   image.setAttribute('srcset', `${DBHelper.imageUrlForRestaurant(restaurant)} 1x, ${DBHelper.imageUrlForRestaurant(restaurant, '@2x')} 2x`);
-  image.setAttribute('alt', restaurant.name);
+  image.setAttribute('alt', `${restaurant.name} restaurant in ${restaurant.neighborhood}`);
   li.append(image);
 
   const name = document.createElement('h1');

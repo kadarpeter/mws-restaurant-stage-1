@@ -22,11 +22,11 @@
     </nav>
     <!-- Beginning breadcrumb -->
 
-    <div class="breadcrumb-container">
-        <ul id="breadcrumb" class="container">
+    <nav role="navigation" aria-label="Breadcrumb" class="breadcrumb-container">
+        <ol id="breadcrumb" class="container">
             <li><a href="/">Home</a></li>
-        </ul>
-    </div>
+        </ol>
+    </nav>
     <!-- End breadcrumb -->
     <!-- End nav -->
 </header>
@@ -40,14 +40,14 @@
 
     <div class="container--flexbox">
         <!-- Beginning map -->
-        <section id="map-container" tabindex="-1" role="application" aria-label="Map with the selected restaurant location">
-            <div id="map" aria-hidden="true" tabindex="-1"></div>
+        <section id="map-container" tabindex="-1">
+            <div id="map" tabindex="-1" role="application" aria-label="Map with the selected restaurant location"></div>
         </section>
         <!-- End map -->
 
         <!-- Beginning restaurant -->
         <section id="restaurant-container">
-            <h1 id="restaurant-name" tabindex="0"></h1>
+            <h2 id="restaurant-name" tabindex="0"></h2>
             <img id="restaurant-img">
             <p id="restaurant-cuisine" aria-label="Restaurant Cuisine"></p>
             <address id="restaurant-address" tabindex="0"></address>
@@ -73,6 +73,8 @@
 <!-- End footer -->
 
 <!-- Beginning scripts -->
+<script type="application/javascript" charset="utf-8" src="js/app.js"></script>
+
 <!-- Database helpers -->
 <script type="text/javascript" src="js/dbhelper.js"></script>
 
