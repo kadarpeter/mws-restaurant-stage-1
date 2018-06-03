@@ -8,39 +8,86 @@ class DBHelper {
    * Change this to restaurants.json file location on your server.
    */
   static get DATABASE_URL() {
-    const port = 1337 // Change this to your server port
+    const port = 1337; // Change this to your server port
     return `http://localhost:${port}/restaurants`;
   }
+
+  /**
+     * Database name
+     * @returns {string}
+     * @constructor
+     */
+    static get DATABASE_NAME() {
+      return 'restaurant';
+    }
+
+    static get DATABASE_VERSION() {
+      return 1;
+    }
+
+    static openDatabase() {
+      return idb.open(DBHelper.DATABASE_NAME, DBHelper.DATABASE_VERSION, upgradeDb => {
+        console.log('open databse');
+        switch (upgradeDb.oldVersion) {
+          case 0:
+            let store = upgradeDb.createObjectStore(DBHelper.DATABASE_NAME, {
+              keyPath: 'id'
+            });
+        }
+
+        //store.createIndex('cuisine', '')
+      });
+    }
 
   /**
    * Fetch all restaurants.
    */
   static fetchRestaurants() {
-    return fetch(this.DATABASE_URL)
-      .then(response => response.json())
-      .then(data => {
-        return data;
+    return DBHelper.openDatabase()
+      .then(db => {
+        if (!db) return;
+
+        return db.transaction(DBHelper.DATABASE_NAME)
+          .objectStore(DBHelper.DATABASE_NAME)
+          .getAll();
       })
-      .catch(error => {
-        console.error(error)
-      })
+      .then(restaurants => {
+        if (restaurants.length) {
+          return restaurants;
+        }
+
+        return fetch(DBHelper.DATABASE_URL)
+          .then(response => response.json())
+          .then(data => {
+            DBHelper.cacheRestaurants(data);
+            return data;
+          })
+          .catch(error => {
+            console.error(error)
+          })
+      });
+  }
+
+  static cacheRestaurants(restaurants) {
+    DBHelper.openDatabase()
+      .then(db => {
+        let tx = db.transaction(DBHelper.DATABASE_NAME, 'readwrite');
+        let store = tx.objectStore(DBHelper.DATABASE_NAME);
+        restaurants.forEach(restaurant => store.put(restaurant));
+
+        return tx.complete;
+      });
   }
 
   /**
    * Fetch a restaurant by its ID.
    */
   static fetchRestaurantById(id) {
-    let restaurantUrl = `${this.DATABASE_URL}/${id}`;
+    //let restaurantUrl = `${this.DATABASE_URL}/${id}`;
 
-    return fetch(restaurantUrl)
-      .then(response => {
-        return response.status === 404 ? false : response.json();
-      })
-      .then(data => {
-        return data;
-      })
-      .catch(error => {
-        console.error(error)
+    return DBHelper.fetchRestaurants()
+      .then(restaurants => {
+        return restaurants.find(r => r.id == id) || Promise.reject(new Error(`Restaurant #${id} not found.`));
       })
   }
 
