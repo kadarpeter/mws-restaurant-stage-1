@@ -68,15 +68,10 @@ const copyHtml = () => {
       .pipe(gulp.dest(paths.dist));
 };
 
-/*gulp.task('copy-html', function() {
-	gulp.src('./index.html')
-		.pipe(gulp.dest('./dist'));
-});
-
-gulp.task('copy-images', function() {
-	gulp.src('img/*')
-		.pipe(gulp.dest('dist/img'));
-});*/
+const copyAssets = () => {
+  return gulp.src(['img/*.*'])
+      .pipe(gulp.dest(paths.img.dist));
+};
 
 // sass
 const scss = () => {
@@ -125,7 +120,7 @@ const jsApp = () => {
 };
 
 const jsServiceWorker = () => {
-  return gulp.src('./sw.js')
+  return gulp.src(['./sw.js', './manifest.json'])
       .pipe(gulp.dest(paths.dist));
 };
 
@@ -185,6 +180,7 @@ serve.description = 'Serve with BroswerSync';
 
 // register tasks
 gulp.task(copyHtml);
+gulp.task(copyAssets);
 gulp.task(images);
 gulp.task(scss);
 gulp.task(prefixcss);
@@ -196,5 +192,5 @@ gulp.task(jsRestaurant);
 gulp.task(minifyJs);
 gulp.task(serve);
 gulp.task('js', gulp.series('jsServiceWorker', 'jsApp', 'jsMain', 'jsRestaurant'));
-gulp.task('default', gulp.series('copyHtml', 'images', 'scss', 'js', 'serve'));
+gulp.task('default', gulp.series('copyHtml', 'copyAssets', 'images', 'scss', 'js', 'serve'));
 
