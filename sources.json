@@ -6,6 +6,7 @@
       "./js/dbhelper.js"
     ],
     "main": [
+      "./js/lazy-loading-images.js",
       "./js/main.js"
     ],
     "restaurant_info": [

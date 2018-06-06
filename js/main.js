@@ -124,6 +124,7 @@ fillRestaurantsHTML = (restaurants = self.restaurants) => {
   restaurants.forEach(restaurant => {
     ul.append(createRestaurantHTML(restaurant));
   });
+  lazyLoadImages();
   if (self.map) {
     addMarkersToMap();
   }
@@ -136,9 +137,11 @@ createRestaurantHTML = (restaurant) => {
   const li = document.createElement('li');
 
   const image = document.createElement('img');
-  image.className = 'restaurant-img';
-  image.src = DBHelper.imageUrlForRestaurant(restaurant);
-  image.setAttribute('srcset', `${DBHelper.imageUrlForRestaurant(restaurant)} 1x, ${DBHelper.imageUrlForRestaurant(restaurant, '@2x')} 2x`);
+  image.className = 'restaurant-img js-lazy-img';
+  image.src = DBHelper.imageUrlForRestaurant(restaurant, '--placeholder');
+  image.setAttribute('data-src', DBHelper.imageUrlForRestaurant(restaurant));
+  image.setAttribute('data-srcset', `${DBHelper.imageUrlForRestaurant(restaurant)} 1x, ${DBHelper.imageUrlForRestaurant(restaurant, '@2x')} 2x`);
+  //image.setAttribute('srcset', `${DBHelper.imageUrlForRestaurant(restaurant)} 1x, ${DBHelper.imageUrlForRestaurant(restaurant, '@2x')} 2x`);
   image.setAttribute('alt', `${restaurant.name} restaurant in ${restaurant.neighborhood}`);
   li.append(image);
 

@@ -5,6 +5,7 @@ const gulp         = require('gulp');
 const autoprefixer = require('gulp-autoprefixer');
 const browserSync  = require('browser-sync').create();
 const concat       = require('gulp-concat');
+const critical     = require('critical');
 const eslint       = require('gulp-eslint');
 const pump         = require('pump');
 const responsive   = require('gulp-responsive');
@@ -41,6 +42,9 @@ const images = () => {
             }, {
                 width: 400 * 2,
                 rename: {suffix: '@2x'},
+            }, {
+                width: 16,
+                rename: {suffix: '--placeholder'},
             }],
             // Resize all PNG images to be retina ready
             '*.png': [{
@@ -64,7 +68,7 @@ const images = () => {
 images.description = 'Create responsive images.';
 
 const copyHtml = () => {
-  return gulp.src(['./index.html', './restaurant.html'])
+  return gulp.src(['./index.html', './restaurant.html', './favicon.ico'])
       .pipe(gulp.dest(paths.dist));
 };
 
@@ -94,6 +98,19 @@ const prefixcss = () => {
         .pipe(gulp.dest(paths.css.dist));
 };
 prefixcss.description = 'Use autoprefixer to support older brwosers';
+
+// critical css for the frontpage (https://github.com/addyosmani/critical)
+const criticalcss = () => {
+    return critical.generate({
+        inline: true,
+        base: 'dist/',
+        src: 'index.html',
+        dest: 'index.html',
+        minify: true,
+        width: 320,
+        height: 480
+    });
+};
 
 // linting JS files
 const lint = () => {
@@ -184,6 +201,7 @@ gulp.task(copyAssets);
 gulp.task(images);
 gulp.task(scss);
 gulp.task(prefixcss);
+gulp.task(criticalcss);
 gulp.task(lint);
 gulp.task(jsApp);
 gulp.task(jsServiceWorker);
