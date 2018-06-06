@@ -36,8 +36,7 @@ window.initMap = () => {
  */
 fetchRestaurantFromURL = () => {
   if (self.restaurant) {
-    console.log('restaurant already fetched!');
-    return;
+    return Promise.resolve(self.restaurant);
   }
 
   const id = getParameterByName('id');
