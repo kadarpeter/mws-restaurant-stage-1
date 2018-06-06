@@ -1,0 +1,28 @@
+//
+// Skip link
+// --------------------------------------------------
+
+/* Skip link */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: #bf1722;
+  color: #fff;
+  padding: 8px;
+  z-index: 100;
+}
+
+.skip-link:hover {
+  color: #fff;
+  background: #ac1621;
+}
+
+.skip-link:focus {
+  top: 80px;
+  color: #fff;
+}
+
+.inside .skip-link:focus {
+  top: 115px;
+}

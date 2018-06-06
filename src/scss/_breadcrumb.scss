@@ -1,0 +1,51 @@
+//
+// Breadcrumb style
+// --------------------------------------------------
+
+.breadcrumb-container {
+  background-color: #eee;
+  display: block;
+  height: auto;
+  text-align: left;
+}
+
+#breadcrumb {
+  padding: 0 15px;
+  list-style: none;
+  font-size: 17px;
+  margin: 0 auto;
+  /*width: calc(50% - 80px);*/
+}
+
+/* Display list items side by side */
+#breadcrumb li {
+  display: inline-block;
+}
+
+/* Add a slash symbol (/) before/behind each list item */
+#breadcrumb li + li:before {
+  padding-right: 8px;
+  color: black;
+  content: "/\00a0";
+}
+
+/* Add a color to all links inside the list */
+#breadcrumb li a {
+  color: $breadcrumb-link-color;
+  text-decoration: none;
+  padding: 8px;
+  display: inline-block;
+}
+
+/* Add a color on mouse-over */
+#breadcrumb li a:hover {
+  color: #01447e;
+  text-decoration: underline;
+}
+
+/* Last bradcrumb link no hover */
+#breadcrumb li:last-child a,
+#breadcrumb li:last-child a:hover {
+  color: #333;
+  text-decoration: none;
+}

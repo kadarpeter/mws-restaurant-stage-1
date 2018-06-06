@@ -1,0 +1,24 @@
+//
+// Restaurant Hours table
+// --------------------------------------------------
+
+#restaurant-hours {
+  border-collapse: collapse;
+  width: 100%;
+  max-width: 100%;
+}
+
+#restaurant-hours th,
+#restaurant-hours td {
+  padding: 3px;
+  vertical-align: top;
+  border-bottom: 1px solid #dcdcdc;
+}
+
+#restaurant-hours > tr > td:first-child {
+  font-weight: 600;
+}
+
+#restaurant-hours td {
+  color: #666;
+}

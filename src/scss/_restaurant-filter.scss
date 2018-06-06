@@ -1,0 +1,64 @@
+//
+// Restaurant Filtering
+// --------------------------------------------------
+
+.filter-options {
+  width: 100%;
+  padding: 15px 0;
+  min-height: 50px;
+  background-color: $filter-background;
+  align-items: center;
+  display: flex;
+  flex-flow: column wrap;
+}
+
+.filter-options h2 {
+  color: white;
+  font-size: 1rem;
+  font-weight: normal;
+  line-height: 1;
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.filter-options select {
+  background-color: white;
+  border: 1px solid #fff;
+  font-family: Arial, sans-serif;
+  font-size: 11pt;
+  height: 35px;
+  letter-spacing: 0;
+  padding: 0 10px;
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.filter-options select:last-child {
+  margin-bottom: 0;
+}
+
+@media (min-width: 480px) {
+  .filter-options select {
+    width: calc(50% - 10px);
+    margin: 0 15px 0 0;
+  }
+
+  .filter-options select:last-child {
+    margin: 0;
+  }
+}
+
+@media (min-width: 760px) {
+  .filter-options {
+    flex-flow: row wrap;
+  }
+
+  .filter-options h2 {
+    display: inline;
+    margin-right: 15px;
+  }
+
+  .filter-options select {
+    width: 200px;
+  }
+}
