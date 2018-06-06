@@ -1,4 +1,4 @@
-# Mobile Web Specialist Certification Course
+# Mobile Web Specialist Certification Course - Stage 2
 ---
 #### _Three Stage Course Material Project - Restaurant Reviews_
 
@@ -20,7 +20,7 @@ seamless offline experience for the users.
 To start developer mode, then simply run `gulp default`. If you make any changes to the HTML/CSS/JS 
 files, the browser will automatically reload.
 
-## Lightjpuse scores
+## Lighthouse scores
 
 To view the scores please visit https://googlechrome.github.io/lighthouse/viewer/ and use the json
 files located in `lighthouse-reports` folder, or use the following gists:
