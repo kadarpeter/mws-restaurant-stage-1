@@ -1,4 +1,6 @@
 let restaurant;
+let reviews;
+const form = document.querySelector('#add-review-form');
 
 /**
  * Fetch restaurant info on page load
@@ -47,6 +49,19 @@ fetchRestaurantFromURL = () => {
   }
 };
 
+fetchReviewsFromURL = () => {
+  if (self.reviews) {
+    return Promise.resolve(self.reviews);
+  }
+
+  const id = getParameterByName('id');
+  if (!id) {
+    console.error(`No restaurant id in URL! `);
+  } else {
+    return DBHelper.fetchReviewsByRestaurantId(id);
+  }
+};
+
 /**
  * Create restaurant HTML and add it to the webpage
  */
@@ -71,7 +86,11 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
     fillRestaurantHoursHTML();
   }
   // fill reviews
-  fillReviewsHTML();
+  fetchReviewsFromURL()
+    .then(reviews => {
+      self.reviews = reviews;
+      fillReviewsHTML();
+    });
 };
 
 /**
@@ -98,7 +117,7 @@ fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => 
 /**
  * Create all reviews HTML and add them to the webpage.
  */
-fillReviewsHTML = (reviews = self.restaurant.reviews) => {
+fillReviewsHTML = (reviews = self.reviews) => {
   const container = document.getElementById('reviews-container');
   const title = document.createElement('h3');
   title.innerHTML = 'Reviews';
@@ -135,7 +154,7 @@ createReviewHTML = (review) => {
   reviewHeader.classList.add('review-header');
 
   const date = document.createElement('span');
-  date.innerHTML = review.date;
+  date.innerHTML = timeAgo(review.updatedAt);
   date.classList.add('review-date');
   date.setAttribute('aria-label', 'Review date');
   reviewHeader.appendChild(date);
@@ -178,4 +197,101 @@ getParameterByName = (name, url) => {
   if (!results[2])
     return '';
   return decodeURIComponent(results[2].replace(/\+/g, ' '));
+};
+
+validateReviewForm = (form) => {
+  const $name = form.querySelector('#reviewer-name');
+  const $comment = form.querySelector('#review-comment');
+  const $rating = form.querySelector('#review-rating');
+  
+  let countErrors = 0;
+  [$name, $comment].forEach(input => {
+    let inputValueWithoutSpaces = input.value.replace(/\s+/g, '');
+    if (inputValueWithoutSpaces.length === 0) {
+      countErrors++;
+    }
+  });
+
+  if (countErrors) {
+    return false;
+  }
+
+  let createdAt =(new Date()).getTime();
+
+  return {
+    restaurant_id: parseInt(getParameterByName('id'), 10),
+    name: $name.value,
+    rating: parseInt($rating.value, 10),
+    comments: $comment.value,
+    createdAt: createdAt,
+    updatedAt: createdAt
+  };
+};
+
+addReview = (review) => {
+  // append to dom
+  const reviewList = document.getElementById('reviews-list');
+  reviewList.insertAdjacentElement('beforeend', createReviewHTML(review));
+
+  // save to IDB
+  DBHelper.addReview(review)
+    .then(DBHelper.requestSync())
+    .catch(err => {
+      console.log(err);
+    });
+
+  // clear form
+  form.reset();
+};
+
+addReviewListener = () => {
+  // TODO @kp: remove test data (created: 2018. 07. 07.)
+  form.querySelector('#reviewer-name').value = 'Peti';
+  form.querySelector('#review-comment').value = 'Comment @ ' + new Date();
+  
+  form.addEventListener('submit', event => {
+    event.preventDefault();
+
+    let newReview = validateReviewForm(form);
+    if (false !== newReview) {
+      addReview(newReview);
+      //DBHelper.requestSync();
+      //DBHelper.syncReviews();
+    }
+  });
+};
+
+addReviewListener();
+
+/**
+ * Simple function to relative time format
+ * @param t
+ * @returns {string}
+ */
+timeAgo = (t) => {
+  let a = new Date(t);
+  let today = new Date();
+  let yesterday = new Date(Date.now() - 86400000);
+  let months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  let year = a.getFullYear();
+  let month = months[a.getMonth()];
+  let date = a.getDate();
+  let hour = a.getHours();
+  let min = a.getMinutes();
+  if (hour < 10) {
+    hour = '0' + hour;
+  }
+
+  if (min < 10) {
+    min = '0' + min;
+  }
+
+  if (a.setHours(0, 0, 0, 0) === today.setHours(0, 0, 0, 0))
+    return 'today, ' + hour + ':' + min;
+  else if (a.setHours(0, 0, 0, 0) === yesterday.setHours(0, 0, 0, 0))
+    return 'yesterday, ' + hour + ':' + min;
+  else if (year === today.getFullYear())
+    return date + ' ' + month + ', ' + hour + ':' + min;
+  else
+    return date + ' ' + month + ' ' + year + ', ' + hour + ':' + min;
 };

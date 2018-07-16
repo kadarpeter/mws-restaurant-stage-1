@@ -5,8 +5,9 @@
  * Author: Kádár Péter <kadar.peter@gmail.com>
  * Project: mws-restaurant-stage-1
  */
+importScripts('js/app.js');
 
-const CACHE_NAME = 'mws-restaurant-cache-v1';
+const CACHE_NAME = 'mws-restaurant-cache-v2';
 
 // TODO @kp: refactor image caching, into different cache (created: 2018. 04. 05.)
 let assetsCache = [
@@ -89,3 +90,13 @@ self.addEventListener('fetch', (event) => {
     }).catch((err) => console.log(err, event.request))
   );
 });
+
+self.addEventListener('sync', (event) => {
+  if (event.tag === 'sync-reviews') {
+    event.waitUntil(serverSync());
+  }
+});
+
+async function serverSync() {
+  return DBHelper.syncReviews();
+}

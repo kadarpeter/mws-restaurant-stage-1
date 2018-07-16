@@ -206,8 +206,9 @@ const serve = () => {
 
     gulp.watch(src_path + 'scss/**/*.scss', gulp.series('scss'));
     gulp.watch(src_path + 'js/**/*.js', gulp.series('js'));
-    //gulp.watch(src_path + '**/*.html', gulp.series('copyHtml'));
-    //gulp.watch(dist_path + '*.html').on('change', browserSync.reload);
+    gulp.watch(src_path + '**/*.html', gulp.series('copyHtml'));
+    gulp.watch(src_path + 'sw.js', gulp.series('copyAssets'));
+    gulp.watch(dist_path + '*.html').on('change', browserSync.reload);
     //gulp.watch(dist_path + 'js/**/*.js').on('change', browserSync.reload);
 
     browserSync.init(bsOptions);
