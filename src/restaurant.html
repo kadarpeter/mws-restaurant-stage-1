@@ -69,26 +69,33 @@
     <!-- Beginning review-form -->
     <section id="add-review-container" class="container">
         <form id="add-review-form" aria-label="review form">
-            <div class="form-group">
-                <label for="reviewer-name">Add your own review!</label>
-                <input id="reviewer-name" name="Review[name]" placeholder="Your name" aria-label="Enter your name here."/>
+            <h3 class="form__title">Add your own review!</h3>
+            <div class="form-group-row">
+                <div class="form-group">
+                    <label class="form-group__label" for="reviewer-name">Your name</label>
+                    <input class="form-group__input" id="reviewer-name" name="Review[name]" placeholder="Your name" aria-label="Enter your name here."/>
+                    <span id="error-reviewer-name" class="form-group__error"></span>
+                </div>
+                <div class="form-group">
+                    <label class="form-group__label" for="review-rating">Rating:</label>
+                    <select class="form-group__input" id="review-rating" name="Review[rating]">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5" selected>5</option>
+                    </select>
+                </div>
             </div>
             <div class="form-group">
-                <label for="review-rating">Rating:</label>
-                <select id="review-rating" name="Review[rating]">
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5" selected>5</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="review-comment">Your review</label>
-                <textarea id="review-comment" name="Review[comment]" placeholder="Enter your review here."></textarea>
+                <label class="form-group__label" for="review-comment">Your review</label>
+                <textarea class="form-group__textarea" id="review-comment" name="Review[comment]"
+                          placeholder="Enter your review here." rows="3">
+                </textarea>
+                <span id="error-review-comment" class="form-group__error"></span>
             </div>
 
-            <button id="review-submit-button">
+            <button id="review-submit-button" class="form-group__button">
                 Submit your review
             </button>
         </form>

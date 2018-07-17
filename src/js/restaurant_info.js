@@ -199,6 +199,11 @@ getParameterByName = (name, url) => {
   return decodeURIComponent(results[2].replace(/\+/g, ' '));
 };
 
+/**
+ * Very simple validation. If the form is valid, then return the review object
+ * @param form
+ * @returns {*}|false
+ */
 validateReviewForm = (form) => {
   const $name = form.querySelector('#reviewer-name');
   const $comment = form.querySelector('#review-comment');
@@ -207,8 +212,15 @@ validateReviewForm = (form) => {
   let countErrors = 0;
   [$name, $comment].forEach(input => {
     let inputValueWithoutSpaces = input.value.replace(/\s+/g, '');
+    let $errorMessageContainer  = form.querySelector(`#error-${input.id}`);
+    let $formGroup              = $errorMessageContainer.parentNode;
     if (inputValueWithoutSpaces.length === 0) {
+      $errorMessageContainer.innerHTML = 'This field is required!';
+      $formGroup.classList.add('has-error');
       countErrors++;
+    } else {
+      $errorMessageContainer.innerHTML = '';
+      $formGroup.classList.remove('has-error');
     }
   });
 
