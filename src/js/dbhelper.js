@@ -162,6 +162,7 @@ class DBHelper {
 
   static postReview(review) {
     // delete the offline_id property, we need it only in IDB
+    // noinspection JSUnresolvedVariable
     delete review.offline_id;
     const options = {
       method: 'POST',
@@ -210,6 +211,7 @@ class DBHelper {
         console.log('sync needed', reviews_need_sync);
         return Promise.all(reviews_need_sync.map(review => {
           // post to server
+          // noinspection JSUnresolvedVariable
           let offline_id = review.offline_id;
           return DBHelper.postReview(review)
             .then(response => {
@@ -258,7 +260,7 @@ class DBHelper {
   /**
    * Fetch restaurants by a cuisine and a neighborhood with proper error handling.
    */
-  static fetchRestaurantByCuisineAndNeighborhood(cuisine, neighborhood) {
+  static fetchRestaurantByCuisineAndNeighborhood(cuisine, neighborhood, favorites_only = false) {
     // Fetch all restaurants
     return DBHelper.fetchRestaurants()
       .then(restaurants => {
@@ -270,6 +272,10 @@ class DBHelper {
         if (neighborhood !== 'all') { // filter by neighborhood
           // noinspection JSUnresolvedVariable
           results = results.filter(r => r.neighborhood === neighborhood);
+        }
+        if (true === favorites_only) {
+          // noinspection JSUnresolvedVariable
+          results = results.filter(r => (r.is_favorite === true || r.is_favorite === 'true'));
         }
         return results;
       });

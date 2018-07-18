@@ -84,16 +84,18 @@ window.initMap = () => {
  * Update page and map for current restaurants.
  */
 updateRestaurants = () => {
-  const cSelect = document.getElementById('cuisines-select');
-  const nSelect = document.getElementById('neighborhoods-select');
+  const cSelect   = document.getElementById('cuisines-select');
+  const nSelect   = document.getElementById('neighborhoods-select');
+  const fCheckbox = document.getElementById('favorite-checkbox');
 
   const cIndex = cSelect.selectedIndex;
   const nIndex = nSelect.selectedIndex;
 
   const cuisine = cSelect[cIndex].value;
   const neighborhood = nSelect[nIndex].value;
+  const favorites_only = fCheckbox.checked;
 
-  DBHelper.fetchRestaurantByCuisineAndNeighborhood(cuisine, neighborhood)
+  DBHelper.fetchRestaurantByCuisineAndNeighborhood(cuisine, neighborhood, favorites_only)
     .then(restaurants => {
       resetRestaurants(restaurants);
       fillRestaurantsHTML();
