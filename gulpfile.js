@@ -8,6 +8,8 @@ const concat       = require('gulp-concat');
 const csso         = require('gulp-csso');
 const critical     = require('critical');
 const eslint       = require('gulp-eslint');
+const imagemin     = require('imagemin');
+const imageminWebp = require('imagemin-webp');
 const pump         = require('pump');
 const responsive   = require('gulp-responsive');
 const sass         = require('gulp-sass');
@@ -54,6 +56,15 @@ const images = () => {
         .pipe(gulp.dest(src_path + 'img'));
 };
 images.description = 'Create responsive images.';
+
+const webp = () => {
+  return imagemin([src_path + 'img/*.{jpg,png}'], src_path + 'img', {
+      use: [
+          imageminWebp({quality: 65})
+      ]
+  });
+};
+webp.description = 'Convert images to webp format';
 
 const copyHtml = () => {
   return gulp.src([src_path + '*.html'])
@@ -236,6 +247,7 @@ serve.description = 'Serve with BroswerSync for production.';
 gulp.task(copyHtml);
 gulp.task(copyAssets);
 gulp.task(images);
+gulp.task(webp);
 gulp.task(scss);
 gulp.task(prefixcss);
 gulp.task(criticalcss);

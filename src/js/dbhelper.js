@@ -348,14 +348,14 @@ class DBHelper {
    */
   static imageUrlForRestaurant(restaurant, suffix = '') {
     // noinspection JSUnresolvedVariable
-    let imgSrc = `/img/${restaurant.photograph}.jpg`;
+    let imgSrc = `/img/${restaurant.photograph}.webp`;
 
     // fallback for image, if no photograph property
     // noinspection JSUnresolvedVariable
     if (!restaurant.photograph) {
-      imgSrc = `/img/${restaurant.id}.jpg`;
+      imgSrc = `/img/${restaurant.id}.webp`;
     }
-    return (imgSrc.replace('.jpg', suffix + '.jpg'));
+    return (imgSrc.replace('.webp', suffix + '.webp'));
   }
 
   /**
