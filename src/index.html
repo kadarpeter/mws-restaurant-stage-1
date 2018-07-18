@@ -23,9 +23,6 @@
 
 <main id="maincontent" tabindex="-1">
     <a href="#restaurants-list" class="skip-link">Skip to restaurants</a>
-    <section id="map-container">
-        <div id="map" role="application" aria-label="Map with the selected restaurants"></div>
-    </section>
     <section>
         <div class="filter-options">
             <div class="container">
@@ -39,8 +36,16 @@
                 <label class="fillter-options__label">
                     <input id="favorite-checkbox" type="checkbox" onchange="updateRestaurants()"> Show favorites only
                 </label>
+                <label class="fillter-options__label">
+                    <input id="toggle-map-checkbox" type="checkbox" onchange="toggleGoogleMap()"> Show map
+                </label>
             </div>
         </div>
+
+        <section id="map-container" class="is-hidden">
+            <div id="map" role="application" aria-label="Map with the selected restaurants"></div>
+        </section>
+
         <div class="container">
             <ul id="restaurants-list"></ul>
         </div>
@@ -50,7 +55,7 @@
 <script src="js/app.js"></script>
 <script src="js/main.js"></script>
 <script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAVfk0mR5tzmg10Trec60Bi2FgGzMaml-s&libraries=places&callback=initMap"></script>
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAVfk0mR5tzmg10Trec60Bi2FgGzMaml-s&callback=onGoogleMapsLoad"></script>
 
 
 <footer id="footer">

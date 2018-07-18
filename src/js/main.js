@@ -1,6 +1,7 @@
 let restaurants,
   neighborhoods,
-  cuisines;
+  cuisines,
+  isGoogleMapsLoaded = false;
 var map;
 var markers = [];
 
@@ -67,17 +68,40 @@ fillCuisinesHTML = (cuisines = self.cuisines) => {
 /**
  * Initialize Google map, called from HTML.
  */
+const $mapContainer      = document.querySelector('#map-container');
+const $map               = document.querySelector('#map');
+const $toggleMapCheckbox = document.querySelector('#toggle-map-checkbox');
 window.initMap = () => {
   let loc = {
     lat: 40.722216,
     lng: -73.987501
   };
-  self.map = new google.maps.Map(document.getElementById('map'), {
+  self.map = new google.maps.Map($map, {
     zoom: 12,
     center: loc,
     scrollwheel: false
   });
-  updateRestaurants();
+  //updateRestaurants();
+  addMarkersToMap();
+};
+
+onGoogleMapsLoad = () => {
+  console.log('Google Maps API loaded');
+  isGoogleMapsLoaded = true;
+};
+
+
+toggleGoogleMap = () => {
+  if (!isGoogleMapsLoaded) {
+    $toggleMapCheckbox.checked = false;
+    alert('Google Maps is not loaded yet...');
+    return;
+  }
+
+  $mapContainer.classList.toggle('is-hidden');
+  if (!$mapContainer.classList.contains('is-hidden') && isGoogleMapsLoaded && !map) {
+    initMap();
+  }
 };
 
 /**
