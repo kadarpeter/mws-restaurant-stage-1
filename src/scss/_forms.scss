@@ -90,10 +90,11 @@ $color--error: #d32f2f;
   text-align: center;
   text-decoration: none;
   text-transform: uppercase;
+  cursor: pointer;
 }
 
-.btn--favorite, .btn--unfavorite {
-  font-size: 1.25rem;
+.btn--favorite, .btn--unfavorite, .btn--reviews {
+  font-size: 1rem;
   background: transparent;
   border: 2px solid $restaurant-details-button-background;
   border-radius: 3px;
@@ -109,12 +110,17 @@ $color--error: #d32f2f;
 
   .btn__label:before {
     content: "\2606";
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     margin-right: 8px;
     position: absolute;
     top: 1px;
     left: 8px;
   }
+}
+
+.btn--reviews {
+  line-height: normal;
+  padding: 8px 10px;
 }
 
 .btn--favorite.is-favorite {
@@ -126,5 +132,16 @@ $color--error: #d32f2f;
   }
   .btn__label:before {
     content: "\2605";
+  }
+}
+
+@media (min-width: 980px) {
+  .btn {
+    font-size: 1.25rem;
+
+    .btn__label:before {
+      font-size: 1.5rem;
+      top: 1px;
+    }
   }
 }

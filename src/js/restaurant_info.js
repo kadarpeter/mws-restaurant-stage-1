@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
       self.restaurant = restaurant;
       fillRestaurantHTML();
       fillBreadcrumb();
-
+      observeMap();
       if (true === restaurant.is_favorite || 'true' === restaurant.is_favorite) {
         toggleFavoriteButton();
       }
@@ -23,19 +23,34 @@ document.addEventListener('DOMContentLoaded', () => {
 /**
  * Initialize Google map, called from HTML.
  */
-window.initMap = () => {
-  fetchRestaurantFromURL()
-    .then((restaurant) => {
-      self.map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 16,
-        center: restaurant.latlng,
-        scrollwheel: false
+observeMap = () => {
+  if ('IntersectionObserver' in window) {
+    let mapContainer = document.querySelector('#map-container');
+    let mapObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          initMap();
+          mapObserver.unobserve(entry.target);
+        }
       });
+    });
 
-      if (self.map) {
-        DBHelper.mapMarkerForRestaurant(restaurant, self.map);
-      }
+    mapObserver.observe(mapContainer);
+  } else { // fallback
+    initMap();
+  }
+};
+
+window.initMap = () => {
+  self.map = new google.maps.Map(document.getElementById('map'), {
+    zoom: 16,
+    center: self.restaurant.latlng,
+    scrollwheel: false
   });
+
+  if (self.map) {
+    DBHelper.mapMarkerForRestaurant(self.restaurant, self.map);
+  }
 };
 
 /**
@@ -283,7 +298,7 @@ addReviewListener();
 toggleFavoriteButton = () => {
   $favorite_button.classList.toggle('is-favorite');
   if ($favorite_button.classList.contains('is-favorite')) {
-    $favorite_button_label.innerHTML = 'Remove from favorites';
+    $favorite_button_label.innerHTML = 'Unfavorite';
   } else {
     $favorite_button_label.innerHTML = 'Add to favorites';
   }
