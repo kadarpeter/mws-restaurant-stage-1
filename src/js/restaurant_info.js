@@ -1,7 +1,8 @@
 let restaurant;
 let reviews;
 const form = document.querySelector('#add-review-form');
-
+const $favorite_button = document.querySelector('#favorite-button');
+const $favorite_button_label = document.querySelector('#favorite-button-label');
 /**
  * Fetch restaurant info on page load
  */
@@ -11,6 +12,10 @@ document.addEventListener('DOMContentLoaded', () => {
       self.restaurant = restaurant;
       fillRestaurantHTML();
       fillBreadcrumb();
+
+      if (true === restaurant.is_favorite || 'true' === restaurant.is_favorite) {
+        toggleFavoriteButton();
+      }
     })
     .catch(error => console.log(error));
 });
@@ -274,6 +279,33 @@ addReviewListener = () => {
 };
 
 addReviewListener();
+
+toggleFavoriteButton = () => {
+  $favorite_button.classList.toggle('is-favorite');
+  if ($favorite_button.classList.contains('is-favorite')) {
+    $favorite_button_label.innerHTML = 'Remove from favorites';
+  } else {
+    $favorite_button_label.innerHTML = 'Add to favorites';
+  }
+};
+
+addFavoriteListener = () => {
+  $favorite_button.addEventListener('click', event => {
+    event.preventDefault();
+    toggleFavoriteButton();
+    bookmarkRestaurant();
+  })
+};
+
+addFavoriteListener();
+
+bookmarkRestaurant = () => {
+  if (!self.restaurant) {
+    console.error('Restaurant not found');
+  }
+
+  DBHelper.favoriteRestaurantById(self.restaurant.id);
+};
 
 /**
  * Simple function to relative time format

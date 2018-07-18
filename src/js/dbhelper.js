@@ -138,6 +138,36 @@ class DBHelper {
       });
   }
 
+  /**
+   * Favorite/unfavorite a restaurant
+   * @param id
+   */
+  static favoriteRestaurantById(id) {
+    DBHelper.openDatabase()
+      .then(db => {
+        return db.transaction(DBHelper.TABLE_RESTAURANT, 'readwrite')
+          .objectStore(DBHelper.TABLE_RESTAURANT)
+          .openCursor(id);
+      }).then(cursor => {
+      const updatedRestaurant = {...cursor.value, is_favorite: !cursor.value.is_favorite};
+      cursor.update(updatedRestaurant);
+      return updatedRestaurant.is_favorite;
+    }).then(isFavorite => {
+      let favoriteUrl = `${DBHelper.DATABASE_URL}/restaurants/${id}/?is_favorite=${isFavorite}`;
+      const options = {
+        method: 'PUT'
+      };
+      return fetch(favoriteUrl, options)
+        .then(response => response.json())
+        .then(data => {
+          console.log(`Restaurant #${id} (${data.name}) updated success.`);
+        })
+        .catch(error => {
+          console.error(error);
+        })
+    })
+  }
+
   static cacheReviews(reviews) {
       DBHelper.openDatabase()
         .then(db => {

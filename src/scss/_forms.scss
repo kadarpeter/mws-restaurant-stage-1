@@ -78,3 +78,53 @@ $color--error: #d32f2f;
     border-color: $color--error;
   }
 }
+
+.btn {
+  background-color: $restaurant-details-button-background;
+  border: none;
+  color: #fff;
+  display: inline-block;
+  font-size: 10pt;
+  margin: 0;
+  padding: 8px 30px 10px;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.btn--favorite, .btn--unfavorite {
+  font-size: 1.25rem;
+  background: transparent;
+  border: 2px solid $restaurant-details-button-background;
+  border-radius: 3px;
+  color: $restaurant-details-button-background;
+  text-transform: none;
+  padding: 8px 10px 8px 2rem;
+  position: relative;
+
+  &:hover {
+    background-color: $restaurant-details-button-background;
+    color: #fff;
+  }
+
+  .btn__label:before {
+    content: "\2606";
+    font-size: 1.5rem;
+    margin-right: 8px;
+    position: absolute;
+    top: 1px;
+    left: 8px;
+  }
+}
+
+.btn--favorite.is-favorite {
+  background: $restaurant-details-button-background;
+  color: #fff;
+  &:hover {
+    background-color: darken($restaurant-details-button-background, 10%);
+    border-color: darken($restaurant-details-button-background, 10%);
+  }
+  .btn__label:before {
+    content: "\2605";
+  }
+}
