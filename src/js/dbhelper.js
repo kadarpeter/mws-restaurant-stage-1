@@ -220,7 +220,6 @@ class DBHelper {
   static requestSync()
   {
     if (navigator.serviceWorker) {
-      console.log(navigator.serviceWorker);
       navigator.serviceWorker.ready.then(sw => {
         console.log('Sync requested at: ', new Date(Date.now()).toLocaleString());
         return sw.sync.register('sync-reviews');

@@ -92,7 +92,6 @@ self.addEventListener('fetch', (event) => {
 });
 
 self.addEventListener('sync', (event) => {
-  console.log(event);
   if (event.tag === 'sync-reviews') {
     console.log('SW:sync-reviews');
     event.waitUntil(serverSync());
@@ -109,7 +108,6 @@ async function serverSync() {
       if (savedReviews) { // if sync is complete then notify clients to update the reviews status
         self.clients.matchAll().then(function (clients) {
           clients.forEach(function (client) {
-            console.log(client);
             client.postMessage({
               action: 'sync-success',
               reviews: savedReviews
