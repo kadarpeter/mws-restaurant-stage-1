@@ -5,7 +5,7 @@
  * Author: Kádár Péter <kadar.peter@gmail.com>
  * Project: mws-restaurant-stage-1
  */
-//importScripts('js/app.js');
+importScripts('js/app.js');
 
 const CACHE_NAME = 'mws-restaurant-cache-v3';
 
@@ -92,20 +92,31 @@ self.addEventListener('fetch', (event) => {
 });
 
 self.addEventListener('sync', (event) => {
-  if (event.tag === 'sync-requested') {
+  console.log(event);
+  if (event.tag === 'sync-reviews') {
+    console.log('SW:sync-reviews');
     event.waitUntil(serverSync());
   }
 });
 
+/**
+ * Synt to server
+ * @returns {Promise}
+ */
 async function serverSync() {
-  self.clients.matchAll().then(function (clients){
-    clients.forEach(function(client){
-      console.log(client);
-      client.postMessage({
-        action: 'sync-reviews',
-      });
-    });
-  });
-
-  //return DBHelper.syncReviews();
+  return DBHelper.syncReviews()
+    .then(savedReviews => {
+      if (savedReviews) { // if sync is complete then notify clients to update the reviews status
+        self.clients.matchAll().then(function (clients) {
+          clients.forEach(function (client) {
+            console.log(client);
+            client.postMessage({
+              action: 'sync-success',
+              reviews: savedReviews
+            });
+          });
+        })
+      }
+    })
+    .catch(err => console.log(err));
 }

@@ -182,27 +182,31 @@ class DBHelper {
       .then(db => {
         if (!db) return;
 
-        return db.transaction(DBHelper.TABLE_REVIEW, 'readwrite')
-          .objectStore(DBHelper.TABLE_REVIEW)
+        let tx = db.transaction(DBHelper.TABLE_REVIEW, 'readwrite');
+        tx.objectStore(DBHelper.TABLE_REVIEW)
           .put(review);
+
+        return tx.complete;
       });
   }
 
   static postReview(review) {
     // delete the offline_id property, we need it only in IDB
     // noinspection JSUnresolvedVariable
-    delete review.offline_id;
     const options = {
       method: 'POST',
       body: JSON.stringify(review)
     };
 
-    return fetch(`${DBHelper.DATABASE_URL}/reviews`, options);
+    return fetch(`${DBHelper.DATABASE_URL}/reviews`, options)
+      .then((response) => {
+        return response.json();
+      });
   }
 
   static updateReviewById(offline_id, updatedReviewData) {
     console.log(`UPDATE REVIEW IN IDB BY ID #${offline_id}`);
-    DBHelper.openDatabase()
+    return DBHelper.openDatabase()
       .then(db => {
         return db.transaction(DBHelper.TABLE_REVIEW, 'readwrite')
           .objectStore(DBHelper.TABLE_REVIEW)
@@ -216,13 +220,18 @@ class DBHelper {
   static requestSync()
   {
     if (navigator.serviceWorker) {
-      navigator.serviceWorker.ready.then(swRegistration => {
-        console.log('Background Sync requested', new Date(Date.now()));
-        return swRegistration.sync.register('sync-requested');
+      console.log(navigator.serviceWorker);
+      navigator.serviceWorker.ready.then(sw => {
+        console.log('Sync requested at: ', new Date(Date.now()).toLocaleString());
+        return sw.sync.register('sync-reviews');
       });
     }
   }
 
+  /**
+   *
+   * @returns {Promise}
+   */
   static syncReviews()
   {
     return DBHelper.openDatabase()
@@ -234,26 +243,11 @@ class DBHelper {
         const reviews_need_sync = reviews.filter(r => !r.hasOwnProperty('id'));
         if (!reviews_need_sync.length) {
           console.info('There is no reviews to sync...');
-          return;
+          return Promise.resolve();
         }
         return Promise.all(reviews_need_sync.map(review => {
           // post to server
-          // noinspection JSUnresolvedVariable
-          let offline_id = review.offline_id;
-          return DBHelper.postReview(review)
-            .then(response => {
-              return response.json();
-            }).then(data => {
-              if (data.id) {
-                DBHelper.updateReviewById(offline_id, {id: parseInt(data.id)});
-                let $reviewStatus = document.querySelector(`#reviewStatus_${data.createdAt}`);
-                if ($reviewStatus) {
-                  $reviewStatus.classList.remove('badge--warning');
-                  $reviewStatus.innerHTML = 'Sync success!';
-                  $reviewStatus.classList.add('badge--success');
-                }
-              }
-            })
+          return DBHelper.postReview(review);
         }));
     }).catch(err => console.error(err));
   }

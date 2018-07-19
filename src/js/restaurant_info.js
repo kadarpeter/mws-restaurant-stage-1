@@ -19,14 +19,29 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     })
     .catch(error => console.log(error));
+  registerSyncSuccessEvent();
+});
 
+/**
+ * Registering sync success event, to update IDB and DOM after success server sync
+ */
+registerSyncSuccessEvent = () => {
   navigator.serviceWorker.addEventListener('message', event => {
-    console.log(event.data);
-    if ('sync-reviews' === event.data.action) {
-      DBHelper.syncReviews();
+    if ('sync-success' === event.data.action) {
+      event.data.reviews.forEach(review => {
+        DBHelper.updateReviewById(review.offline_id, review)
+          .then(r => {
+            let $reviewStatus = document.querySelector(`#reviewStatus_${review.createdAt}`);
+            if ($reviewStatus) {
+              $reviewStatus.classList.remove('badge--warning');
+              $reviewStatus.innerHTML = 'Sync success!';
+              $reviewStatus.classList.add('badge--success');
+            }
+          });
+      });
     }
   });
-});
+};
 
 /**
  * Initialize Google map, called from HTML.
@@ -283,6 +298,13 @@ validateReviewForm = (form) => {
   };
 };
 
+/**
+ * Add Review
+ *  - append to dom
+ *  - save to IDB
+ *  - sync with server
+ * @param review
+ */
 addReview = (review) => {
   // append to dom
   const reviewList = document.getElementById('reviews-list');
@@ -290,19 +312,21 @@ addReview = (review) => {
 
   // save to IDB
   DBHelper.addReview(review)
-    .then(DBHelper.requestSync())
+    .then(() => DBHelper.requestSync())
     .catch(err => {
       console.log(err);
     });
 
   // clear form
   form.reset();
+  form.querySelector('#reviewer-name').value = '';
+  form.querySelector('#review-comment').value = '';
 };
 
 addReviewListener = () => {
-  // TODO @kp: remove test data (created: 2018. 07. 07.)
-  form.querySelector('#reviewer-name').value = 'Peti';
-  form.querySelector('#review-comment').value = 'Comment @ ' + new Date();
+  // test data, uncomment the following 2 lines for debug
+  // form.querySelector('#reviewer-name').value = 'Test User';
+  // form.querySelector('#review-comment').value = 'Comment @ ' + new Date().toLocaleString();
   
   form.addEventListener('submit', event => {
     event.preventDefault();
