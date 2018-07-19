@@ -1,4 +1,4 @@
-# Mobile Web Specialist Certification Course - Stage 2
+# Mobile Web Specialist Certification Course - Stage 3
 ---
 #### _Three Stage Course Material Project - Restaurant Reviews_
 
@@ -10,7 +10,7 @@ seamless offline experience for the users.
 
 ### How to run?
 
-1. Clone https://github.com/udacity/mws-restaurant-stage-2 and and follow instructions to start the 
+1. Clone https://github.com/udacity/mws-restaurant-stage-3 and and follow instructions to start the 
    API server. This is required to fetch the restaurants.
 
 2. Run `npm install` to install all dependencies. 
@@ -25,7 +25,7 @@ files, the browser will automatically reload.
 To view the scores please visit https://googlechrome.github.io/lighthouse/viewer/ and use the json
 files located in `lighthouse-reports` folder, or use the following gists:
 
-- **Frontpage:** https://gist.github.com/kadarpeter/784841adef50b8adf55ed85b38cda6c3
-- **Restaurant details:** https://gist.github.com/kadarpeter/a627689ed882cc62ba313d13cee92f02
+- **Frontpage:** https://gist.github.com/kadarpeter/951ff043111e6251faa9b93cecb43937
+- **Restaurant details:** https://gist.github.com/kadarpeter/469ea4fffea9ac8b09cca731e7848244
 
 
