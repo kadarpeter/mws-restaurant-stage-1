@@ -1,5 +1,6 @@
 let restaurant;
 let reviews;
+let isGoogleMapsLoaded = false;
 const form = document.querySelector('#add-review-form');
 const $favorite_button = document.querySelector('#favorite-button');
 const $favorite_button_label = document.querySelector('#favorite-button-label');
@@ -18,17 +19,29 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     })
     .catch(error => console.log(error));
+
+  navigator.serviceWorker.addEventListener('message', event => {
+    console.log(event.data);
+    if ('sync-reviews' === event.data.action) {
+      DBHelper.syncReviews();
+    }
+  });
 });
 
 /**
  * Initialize Google map, called from HTML.
  */
+onGoogleMapsLoad = () => {
+  console.log('Google Maps API loaded');
+  isGoogleMapsLoaded = true;
+};
+
 observeMap = () => {
   if ('IntersectionObserver' in window) {
     let mapContainer = document.querySelector('#map-container');
     let mapObserver = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
-        if (entry.isIntersecting) {
+        if (entry.isIntersecting && isGoogleMapsLoaded) {
           initMap();
           mapObserver.unobserve(entry.target);
         }
@@ -42,7 +55,7 @@ observeMap = () => {
 };
 
 window.initMap = () => {
-  self.map = new google.maps.Map(document.getElementById('map'), {
+  self.map = new google.maps.Map(document.querySelector('#map'), {
     zoom: 16,
     center: self.restaurant.latlng,
     scrollwheel: false
@@ -190,6 +203,16 @@ createReviewHTML = (review) => {
   comments.innerHTML = review.comments;
   li.appendChild(comments);
 
+  // sync status
+  let reviewSynced = !! review.id;
+  if (!reviewSynced) {
+    const status = document.createElement('span');
+    status.setAttribute('id', `reviewStatus_${review.createdAt}`);
+    status.classList.add('badge', reviewSynced ? 'badge--success' : 'badge--warning');
+    status.innerHTML = reviewSynced ? 'Synced' : 'Offline';
+    li.appendChild(status);
+  }
+
   return li;
 };
 
@@ -287,8 +310,6 @@ addReviewListener = () => {
     let newReview = validateReviewForm(form);
     if (false !== newReview) {
       addReview(newReview);
-      //DBHelper.requestSync();
-      //DBHelper.syncReviews();
     }
   });
 };

@@ -262,6 +262,6 @@ gulp.task(serveDist);
 gulp.task('js', gulp.series('jsApp', 'jsMain', 'jsRestaurant'));
 gulp.task('build:js', gulp.series('js')); // TODO @kp: minify JS files for production (created: 2018. 06. 06.)
 gulp.task('build:css', gulp.series('scss', 'criticalcss', 'cssmin'));
-gulp.task('build', gulp.series('images', gulp.parallel('build:js', 'build:css', 'copyHtml', 'copyAssets')));
+gulp.task('build', gulp.series('images', 'webp', gulp.parallel('build:js', 'build:css', 'copyHtml', 'copyAssets')));
 gulp.task('serveDist', gulp.series('build', 'serveDist'));
-gulp.task('default', gulp.series('images', gulp.parallel('copyHtml', 'copyAssets', 'scss', 'js'), 'serve'));
+gulp.task('default', gulp.series('images', 'webp', gulp.parallel('copyHtml', 'copyAssets', 'scss', 'js'), 'serve'));

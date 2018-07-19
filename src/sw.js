@@ -5,7 +5,7 @@
  * Author: Kádár Péter <kadar.peter@gmail.com>
  * Project: mws-restaurant-stage-1
  */
-importScripts('js/app.js');
+//importScripts('js/app.js');
 
 const CACHE_NAME = 'mws-restaurant-cache-v3';
 
@@ -92,11 +92,20 @@ self.addEventListener('fetch', (event) => {
 });
 
 self.addEventListener('sync', (event) => {
-  if (event.tag === 'sync-reviews') {
+  if (event.tag === 'sync-requested') {
     event.waitUntil(serverSync());
   }
 });
 
 async function serverSync() {
-  return DBHelper.syncReviews();
+  self.clients.matchAll().then(function (clients){
+    clients.forEach(function(client){
+      console.log(client);
+      client.postMessage({
+        action: 'sync-reviews',
+      });
+    });
+  });
+
+  //return DBHelper.syncReviews();
 }

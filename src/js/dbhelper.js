@@ -118,8 +118,6 @@ class DBHelper {
       })
       .then(reviews => {
         if (reviews.length) {
-          //DBHelper.syncReviews();
-          //DBHelper.updateReviewById(4, {name: 'Petiiii'});
           DBHelper.requestSync();
           return reviews;
         }
@@ -220,14 +218,14 @@ class DBHelper {
     if (navigator.serviceWorker) {
       navigator.serviceWorker.ready.then(swRegistration => {
         console.log('Background Sync requested', new Date(Date.now()));
-        return swRegistration.sync.register('sync-reviews');
+        return swRegistration.sync.register('sync-requested');
       });
     }
   }
 
   static syncReviews()
   {
-    DBHelper.openDatabase()
+    return DBHelper.openDatabase()
       .then(db => {
         return db.transaction(DBHelper.TABLE_REVIEW)
           .objectStore(DBHelper.TABLE_REVIEW)
@@ -238,7 +236,6 @@ class DBHelper {
           console.info('There is no reviews to sync...');
           return;
         }
-        console.log('sync needed', reviews_need_sync);
         return Promise.all(reviews_need_sync.map(review => {
           // post to server
           // noinspection JSUnresolvedVariable
@@ -249,6 +246,12 @@ class DBHelper {
             }).then(data => {
               if (data.id) {
                 DBHelper.updateReviewById(offline_id, {id: parseInt(data.id)});
+                let $reviewStatus = document.querySelector(`#reviewStatus_${data.createdAt}`);
+                if ($reviewStatus) {
+                  $reviewStatus.classList.remove('badge--warning');
+                  $reviewStatus.innerHTML = 'Sync success!';
+                  $reviewStatus.classList.add('badge--success');
+                }
               }
             })
         }));
